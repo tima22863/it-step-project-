@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ЧитКвест — Каталог конфігурацій та модифікацій</title>
+    <meta
+      name="description"
+      content="ЧитКвест — каталог перевірених ігрових конфігурацій, читів та модів для CS2, Valorant, Dota 2, Minecraft та інших ігор."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css?v=16" />
+  </head>
+  <body>
+    <div class="site-container">
+      <!-- Main Navigation Header -->
+      <header class="navbar">
+        <div class="navbar-left">
+          <a href="#cabinet" class="logo-link">
+            <span class="logo-badge">CQ</span>
+            <div class="logo-meta">
+              <span class="logo-title">ЧитКвест</span>
+              <span class="logo-sub">Каталог конфігів</span>
+            </div>
+          </a>
+
+          <nav class="nav-links">
+            <a href="#cabinet" class="nav-item is-active" aria-current="page">Каталог</a>
+            <a href="#premium-search" class="nav-item">Платний пошук</a>
+            <a href="#library" class="nav-item">Бібліотека (<span id="libraryCountNav">0</span>)</a>
+            <a href="#cart" class="nav-item nav-cart">
+              Кошик
+              <span class="cart-pill" id="navCartBadge">0</span>
+            </a>
+          </nav>
+        </div>
+
+        <div class="navbar-right">
+          <div class="online-indicator">
+            <span class="online-dot"></span>
+            <span>Онлайн: <strong id="playerCount" aria-live="polite">—</strong></span>
+          </div>
+          <button class="auth-btn" id="authButton" type="button">Увійти</button>
+        </div>
+      </header>
+
+      <!-- Main Workspace -->
+      <main class="main-layout">
+        <!-- SCREEN 1 & 2: STORE / CATALOG VIEW (Main view) -->
+        <section class="screen-view active-screen" id="cabinet" data-screen>
+          <!-- Store Showcase Banner -->
+          <div class="store-banner">
+            <div class="banner-text">
+              <h1>Каталог ігрових конфігурацій та модів</h1>
+              <p>
+                Обирайте гру у списку зліва, фільтруйте за потрібними функціями (Aimbot, ESP, Radar, No Recoil)
+                та зберігайте конфіги в особисту бібліотеку чи кошик.
+              </p>
+            </div>
+            <div class="banner-metrics">
+              <div class="metric-card">
+                <span class="metric-label">Активних позицій</span>
+                <strong class="metric-val" id="activeVariantCount">0</strong>
+              </div>
+              <div class="metric-card">
+                <span class="metric-label">Збережених пошуків</span>
+                <strong class="metric-val" id="savedSearchCount">0</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Two-Column Store Layout (Sidebar Filters + Products Grid) -->
+          <div class="store-layout">
+            <!-- Left Sidebar Filter -->
+            <aside class="store-sidebar">
+              <form id="searchForm" class="sidebar-form">
+                <div class="sidebar-block">
+                  <div class="block-header">
+                    <span class="block-title">Оберіть гру</span>
+                  </div>
+                  <!-- Native select for logic compatibility -->
+                  <select id="gameSelect" name="game" class="native-game-select">
+                    <option value="Valorant">Valorant</option>
+                    <option value="CS2">Counter-Strike 2</option>
+                    <option value="Dota 2">Dota 2</option>
+                    <option value="Apex Legends">Apex Legends</option>
+                    <option value="GTA V">Grand Theft Auto V</option>
+                    <option value="Warzone">Call of Duty: Warzone</option>
+                    <option value="Minecraft">Minecraft (Java / Mods)</option>
+                  </select>
+
+                  <!-- Visual Game List Items -->
+                  <div class="game-nav-list" id="sidebarGameList">
+                    <button type="button" class="game-nav-item is-selected" data-game="Valorant">
+                      <span class="game-name">Valorant</span>
+                      <span class="game-count">7</span>
+                    </button>
+                    <button type="button" class="game-nav-item" data-game="CS2">
+                      <span class="game-name">Counter-Strike 2</span>
+                      <span class="game-count">6</span>
+                    </button>
+                    <button type="button" class="game-nav-item" data-game="Dota 2">
+                      <span class="game-name">Dota 2</span>
+                      <span class="game-count">5</span>
+                    </button>
+                    <button type="button" class="game-nav-item" data-game="Apex Legends">
+                      <span class="game-name">Apex Legends</span>
+                      <span class="game-count">4</span>
+                    </button>
+                    <button type="button" class="game-nav-item" data-game="GTA V">
+                      <span class="game-name">GTA V</span>
+                      <span class="game-count">4</span>
+                    </button>
+                    <button type="button" class="game-nav-item" data-game="Warzone">
+                      <span class="game-name">Warzone</span>
+                      <span class="game-count">5</span>
+                    </button>
+                    <button type="button" class="game-nav-item" data-game="Minecraft">
+                      <span class="game-name">Minecraft (Моди)</span>
+                      <span class="game-count">20+</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="sidebar-block">
+                  <div class="block-header">
+                    <span class="block-title">Категорії</span>
+                    <button type="button" class="reset-link" id="resetFiltersBtn">Скинути</button>
+                  </div>
+                  <div class="chips-list" id="categoryChips" aria-label="Категорії"></div>
+                </div>
+
+                <button type="submit" class="save-search-btn">
+                  Зберегти поточний фільтр
+                </button>
+              </form>
+            </aside>
+
+            <!-- Right Catalog Content Area -->
+            <div class="store-catalog">
+              <!-- Search & Control Toolbar -->
+              <div class="catalog-toolbar">
+                <div class="search-field-wrap">
+                  <span class="search-icon">🔍</span>
+                  <input
+                    type="text"
+                    id="catalogSearchInput"
+                    placeholder="Пошук за назвою або описом..."
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="catalog-status">
+                  <span class="catalog-count-badge" id="resultsCount">0 варіантів</span>
+                </div>
+              </div>
+
+              <!-- Notice Box -->
+              <div class="disclaimer-banner">
+                <strong>Зверніть увагу:</strong> картки для змагальних шутерів створені як демонстраційний макет і не містять файлів для завантаження. Модифікації для Minecraft посилаються на офіційні сторінки авторів на Modrinth.
+              </div>
+
+              <!-- Results Grid -->
+              <div id="resultsList" class="products-grid" aria-live="polite"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Hidden section id="search" for route compatibility -->
+        <section class="screen-view" id="search" data-screen hidden></section>
+
+        <section class="screen-view" id="premium-search" data-screen aria-labelledby="premiumSearchTitle" hidden>
+          <div class="page-card">
+            <div class="page-header">
+              <div>
+                <h2 id="premiumSearchTitle">Платний пошук Google</h2>
+                <p>Знаходь моди або внутрішньоігрові коди й підказки. Результати відкриваються в Google; сайт не завантажує файли. Статус преміум поки демонстраційний — платежі не підключені.</p>
+              </div>
+            </div>
+            <section class="premium-search-panel">
+              <div id="premiumSearchLocked">
+                <p>Ця функція доступна користувачам зі статусом «Преміум».</p>
+                <button class="btn-action btn-secondary" id="premiumSearchAccountButton" type="button">
+                  Відкрити акаунт
+                </button>
+              </div>
+              <form id="premiumGoogleSearchForm" class="premium-search-form" hidden>
+                <label for="premiumSearchGame">Гра</label>
+                <select id="premiumSearchGame" name="game" required>
+                  <option value="" selected disabled>Оберіть гру</option>
+                  <option value="Counter-Strike 2">Counter-Strike 2</option>
+                  <option value="Valorant">Valorant</option>
+                  <option value="Dota 2">Dota 2</option>
+                  <option value="Minecraft">Minecraft</option>
+                  <option value="Grand Theft Auto V">Grand Theft Auto V</option>
+                  <option value="Call of Duty: Warzone">Call of Duty: Warzone</option>
+                  <option value="Fortnite">Fortnite</option>
+                  <option value="Roblox">Roblox</option>
+                  <option value="PUBG: Battlegrounds">PUBG: Battlegrounds</option>
+                  <option value="League of Legends">League of Legends</option>
+                  <option value="Apex Legends">Apex Legends</option>
+                  <option value="Overwatch 2">Overwatch 2</option>
+                  <option value="Rainbow Six Siege">Rainbow Six Siege</option>
+                  <option value="Rust">Rust</option>
+                  <option value="Rocket League">Rocket League</option>
+                  <option value="Elden Ring">Elden Ring</option>
+                  <option value="Cyberpunk 2077">Cyberpunk 2077</option>
+                  <option value="The Witcher 3: Wild Hunt">The Witcher 3: Wild Hunt</option>
+                  <option value="Terraria">Terraria</option>
+                  <option value="Stardew Valley">Stardew Valley</option>
+                </select>
+                <label for="premiumSearchType">Що шукати</label>
+                <select id="premiumSearchType" name="type">
+                  <option value="mods">Моди</option>
+                  <option value="codes">Внутрішньоігрові коди та підказки</option>
+                </select>
+                <label for="premiumSearchQuery">Назва або тема</label>
+                <input
+                  id="premiumSearchQuery"
+                  name="query"
+                  type="search"
+                  maxlength="120"
+                  placeholder="Наприклад, карти або рецепти"
+                  autocomplete="off"
+                  required
+                />
+                <button class="btn-action" type="submit">Шукати в Google</button>
+              </form>
+              <p id="premiumSearchStatus" class="premium-search-status" role="status" hidden></p>
+              <a
+                id="premiumSearchResult"
+                class="premium-search-result"
+                target="_blank"
+                rel="noopener noreferrer"
+                hidden
+              >Відкрити результати Google</a>
+            </section>
+          </div>
+        </section>
+
+        <!-- SCREEN 3: LIBRARY -->
+        <section class="screen-view" id="library" data-screen hidden>
+          <div class="page-card">
+            <div class="page-header">
+              <div>
+                <h2>Моя бібліотека</h2>
+                <p>Збережені у браузері варіанти для швидкого доступу.</p>
+              </div>
+              <span class="count-tag">Усього: <strong id="libraryCount">0</strong></span>
+            </div>
+            <div id="libraryList" class="library-container"></div>
+          </div>
+        </section>
+
+        <!-- SCREEN 4: CART -->
+        <section class="screen-view" id="cart" data-screen aria-labelledby="cartTitle" hidden>
+          <div class="page-card">
+            <div class="page-header">
+              <div>
+                <h2 id="cartTitle">Кошик замовлення (<span id="cartCount">0</span>)</h2>
+                <p>Обрані товари для відправки списку посилань.</p>
+              </div>
+              <button class="btn-clear" id="clearCartBtn" type="button">Очистити кошик</button>
+            </div>
+
+            <div id="cartItems" class="cart-items-container" aria-live="polite"></div>
+
+            <div class="cart-summary">
+              <div>
+                <span class="summary-title">Загальна вартість:</span>
+                <span class="summary-note">Демо-режим (оплата не потрібна)</span>
+              </div>
+              <strong class="summary-price" id="cartTotal">0₴</strong>
+            </div>
+
+            <div class="checkout-panel">
+              <button class="btn-submit" id="checkoutBtn" type="button" disabled>
+                Купити
+              </button>
+            </div>
+            <p class="checkout-alert" id="checkoutMessage" role="status" hidden></p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog class="auth-modal" id="checkoutEmailDialog" aria-labelledby="checkoutEmailTitle">
+      <div class="auth-modal-content">
+        <button class="modal-close" id="checkoutEmailCloseButton" type="button" aria-label="Закрити">✕</button>
+        <h3 id="checkoutEmailTitle">Вкажіть email</h3>
+        <p>На цю адресу надішлемо список обраних позицій.</p>
+        <form id="checkoutForm" class="checkout-panel" novalidate>
+          <div class="checkout-input-group">
+            <label for="checkoutEmail">Ваш email</label>
+            <input
+              id="checkoutEmail"
+              name="email"
+              type="email"
+              autocomplete="email"
+              placeholder="name@example.com"
+              required
+            />
+          </div>
+          <button class="btn-submit" id="checkoutSubmitBtn" type="submit">
+            Надіслати
+          </button>
+          <p class="checkout-alert" id="checkoutDialogMessage" role="status" hidden></p>
+        </form>
+      </div>
+    </dialog>
+
+    <!-- Auth Modal Dialog -->
+    <dialog class="auth-modal" id="authDialog" aria-labelledby="authTitle">
+      <div class="auth-modal-content">
+        <button class="modal-close" id="authCloseButton" type="button" aria-label="Закрити">✕</button>
+        <h3 id="authTitle">Вхід до акаунту</h3>
+        <p id="authDescription">
+          Увійдіть або зареєструйтесь для збереження конфігів та налаштувань.
+        </p>
+
+        <!-- Profile display when signed in -->
+        <div id="authAccount" hidden>
+          <div class="user-row">
+            <div class="user-avatar-slot" id="authAvatarSlot">
+              <img id="authAvatar" alt="Аватар" hidden />
+              <span class="avatar-fallback" id="authAvatarFallback">U</span>
+            </div>
+            <div class="user-info">
+              <div class="user-name-line">
+                <strong id="authName"></strong>
+                <span class="user-status-pill" id="authStatusPill">Базовий</span>
+              </div>
+              <span id="authEmail"></span>
+              <span class="premium-days-remaining" id="authPremiumDaysRemaining" hidden></span>
+            </div>
+          </div>
+          <button class="account-menu-btn" id="authSubscriptionButton" type="button">
+            Купити підписку на платний пошук
+          </button>
+        </div>
+
+        <div class="account-subscription-menu" id="authSubscriptionMenu" hidden>
+          <h4>Підписка на платний пошук</h4>
+          <p>Оберіть термін:</p>
+          <div class="subscription-duration-options" id="subscriptionDurationOptions">
+            <button type="button" class="subscription-duration-btn" data-days="1" data-label="1 день" aria-pressed="false">1 день</button>
+            <button type="button" class="subscription-duration-btn" data-days="30" data-label="30 днів" aria-pressed="false">30 днів</button>
+            <button type="button" class="subscription-duration-btn" data-days="90" data-label="90 днів" aria-pressed="false">90 днів</button>
+            <button type="button" class="subscription-duration-btn" data-days="180" data-label="180 днів" aria-pressed="false">180 днів</button>
+            <button type="button" class="subscription-duration-btn" data-days="365" data-label="365 днів" aria-pressed="false">365 днів</button>
+            <button type="button" class="subscription-duration-btn" data-days="1200000" data-label="1 200 000 днів" aria-pressed="false">1 200 000 днів</button>
+          </div>
+          <p class="subscription-duration-selection" id="subscriptionDurationSelection" role="status" hidden></p>
+          <button class="btn-submit subscription-buy-btn" id="subscriptionBuyButton" type="button" disabled>
+            Купити
+          </button>
+          <audio id="subscriptionAudioPlayer" src="/subscription-song.mp3" preload="none" hidden></audio>
+          <button class="btn-logout" id="authSubscriptionBackButton" type="button">
+            Назад до акаунта
+          </button>
+        </div>
+
+        <!-- Forms container when NOT signed in -->
+        <div id="authFormsContainer">
+          <div class="auth-tabs" role="tablist">
+            <button type="button" class="auth-tab is-active" id="authTabLogin" role="tab" aria-selected="true">
+              Вхід
+            </button>
+            <button type="button" class="auth-tab" id="authTabRegister" role="tab" aria-selected="false">
+              Реєстрація
+            </button>
+          </div>
+
+          <!-- LOGIN FORM -->
+          <form class="auth-form" id="loginForm">
+            <div class="auth-input-group">
+              <label for="loginUsername">Логін або Email</label>
+              <input
+                id="loginUsername"
+                name="username"
+                type="text"
+                autocomplete="username"
+                placeholder="Введіть логін або email"
+                required
+              />
+            </div>
+            <div class="auth-input-group">
+              <label for="loginPassword">Пароль</label>
+              <input
+                id="loginPassword"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                placeholder="Введіть пароль"
+                required
+              />
+            </div>
+            <button class="btn-submit auth-submit-btn" id="loginSubmitBtn" type="submit">
+              Увійти до акаунту
+            </button>
+          </form>
+
+          <!-- REGISTER FORM -->
+          <form class="auth-form" id="registerForm" hidden>
+            <div class="auth-input-group">
+              <label for="registerUsername">Логін</label>
+              <input
+                id="registerUsername"
+                name="username"
+                type="text"
+                autocomplete="username"
+                placeholder="Придумайте логін (від 3 символів)"
+                minlength="3"
+                required
+              />
+            </div>
+            <div class="auth-input-group">
+              <label for="registerEmail">Email (необов'язково)</label>
+              <input
+                id="registerEmail"
+                name="email"
+                type="email"
+                autocomplete="email"
+                placeholder="name@example.com"
+              />
+            </div>
+            <div class="auth-input-group">
+              <label for="registerPassword">Пароль</label>
+              <input
+                id="registerPassword"
+                name="password"
+                type="password"
+                autocomplete="new-password"
+                placeholder="Придумайте надійний пароль (від 4 символів)"
+                minlength="4"
+                required
+              />
+            </div>
+            <button class="btn-submit auth-submit-btn" id="registerSubmitBtn" type="submit">
+              Зареєструватися
+            </button>
+          </form>
+
+          <div class="auth-divider" id="authDivider"><span>або через Google</span></div>
+          <div id="googleSignInButton" class="google-auth-btn-slot"></div>
+        </div>
+
+        <p class="auth-status-alert" id="authMessage" role="status" hidden></p>
+        <button class="btn-logout" id="authLogoutButton" type="button" hidden>
+          Вийти з акаунту
+        </button>
+      </div>
+    </dialog>
+
+    <!-- Product Card Template -->
+    <template id="resultCardTemplate">
+      <article class="result-card product-item">
+        <div class="item-header">
+          <div class="item-game-badge">
+            <span class="card-game"></span>
+            <span class="card-status-pill status-undetected">Undetected</span>
+          </div>
+          <button class="save-btn" type="button" aria-label="Зберегти в бібліотеку" title="Зберегти">
+            ♡
+          </button>
+        </div>
+
+        <h4 class="card-title item-title"></h4>
+
+        <div class="card-tags item-tags"></div>
+
+        <p class="card-description item-desc"></p>
+
+        <div class="item-footer card-footer">
+          <div class="price-block">
+            <span class="price-caption">Ціна</span>
+            <strong class="card-price price-value"></strong>
+          </div>
+          <div class="item-actions card-actions">
+            <button class="btn-action card-add-to-cart" type="button">До кошика</button>
+            <button class="btn-action btn-secondary card-details-btn" type="button">Детальніше</button>
+            <a class="btn-action btn-secondary mod-link" href="#" target="_blank" rel="noopener noreferrer" hidden>
+              Modrinth ↗
+            </a>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <script src="cart.js?v=7"></script>
+    <script src="script.js?v=20"></script>
+    <script src="cart-checkout.js?v=9"></script>
+    <script src="https://accounts.google.com/gsi/client" defer></script>
+    <script src="auth.js?v=19" defer></script>
+  </body>
+</html>
